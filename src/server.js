@@ -28,7 +28,7 @@ export const setupServer = () => {
   //==PINO==//
 
   //==РОУТИ==
-  app.get('/contacts/:contactId', getContactByIdContriller);
+  app.get('/contacts/:id', getContactByIdContriller);
   app.get('/contacts', getAllContactsContriller);
 
   app.use((req, res) => {

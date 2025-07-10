@@ -2,7 +2,7 @@ import { getContactById, getAllContacts } from '../services/contacts.js';
 
 export const getContactByIdContriller = async (req, res) => {
   try {
-    const contactId = req.params.contactId.trim();
+    const contactId = req.params.id.trim();
     const contact = await getContactById(contactId);
     console.log('Контакти:', JSON.stringify(contact, null, 2));
     if (!contact) {
