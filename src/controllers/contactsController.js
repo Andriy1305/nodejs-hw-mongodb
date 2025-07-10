@@ -3,8 +3,8 @@ import { getContactById, getAllContacts } from '../services/contacts.js';
 export const getContactByIdContriller = async (req, res) => {
   try {
     const contactId = req.params.contactId.trim();
-    console.log('Контакти:', JSON.stringify(contactId, null, 2));
     const contact = await getContactById(contactId);
+    console.log('Контакти:', JSON.stringify(contact, null, 2));
     if (!contact) {
       return res.status(404).json({
         status: 404,
