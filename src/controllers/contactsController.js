@@ -3,7 +3,7 @@ import { getContactById, getAllContacts } from '../services/contacts.js';
 export const getContactByIdContriller = async (req, res) => {
   try {
     const contactId = req.params.contactId.trim();
-    //console.log('Параметри', req.params);
+    console.log('Контакти:', JSON.stringify(contactId, null, 2));
     const contact = await getContactById(contactId);
     if (!contact) {
       return res.status(404).json({
@@ -34,7 +34,7 @@ export const getContactByIdContriller = async (req, res) => {
 export const getAllContactsContriller = async (req, res) => {
   try {
     const contacts = await getAllContacts();
-    // console.log('Конакти', contacts);
+    console.log('Контакти:', JSON.stringify(contacts, null, 2));
     res.status(200).json({
       status: 200,
       data: contacts,
