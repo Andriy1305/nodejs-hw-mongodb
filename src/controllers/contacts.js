@@ -8,6 +8,10 @@ import {
 
 import createHttpError from 'http-errors';
 
+import { parsePaginationContact } from '../utils/parseParams';
+import { parseSortParams } from '../utils/parseSortParams.js';
+import { filterParams } from '../utils/parseFilterParams.js';
+
 export const notFoundHandler = (req, res, next) => {
   next(createHttpError(404, 'Route not found'));
 };
@@ -26,11 +30,23 @@ export const getContactByIdController = async (req, res) => {
 };
 
 export const getAllContactsController = async (req, res) => {
-  const contacts = await getAllContacts();
+  const { page, perPage } = parsePaginationContact(req.query);
+  const { sortBy, sortOrder } = parseSortParams(req.query);
+  const filters = filterParams(req.query);
+  console.log('FILTR:', filters);
+  //console.log({ sortBy, sortOrder });
+  //console.log(page, perPage);
+  const contacts = await getAllContacts({
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
+    filters,
+  });
   res.status(200).json({
     status: 200,
-    data: contacts,
     message: 'Successfully found contacts!',
+    data: contacts,
   });
 };
 

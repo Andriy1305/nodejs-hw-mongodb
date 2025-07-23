@@ -24,7 +24,6 @@ export const setupServer = () => {
   // ==PINO==//
   app.use(pino({ transport: { target: 'pino-pretty' } }));
   //==PINO==//
-
   //==РОУТИ==
   app.use('/contacts', contactRoutes);
 
