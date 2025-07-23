@@ -2,17 +2,15 @@ import pino from 'pino-http';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-
-import {
-  getContactByIdContriller,
-  getAllContactsContriller,
-} from './controllers/contactsController.js';
-
-//import { Contact } from '../models/contact.js';
+import contactRoutes from './routes/contacts.js';
+import { errorHandler } from './middlewares/errorHandler.js';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
 //==ОТОЧЕННЯ==//
 dotenv.config();
 //==ОТОЧЕННЯ==//
+
+const PORT = process.env.PORT || 3000;
 
 export const setupServer = () => {
   const app = express();
@@ -26,15 +24,11 @@ export const setupServer = () => {
   // ==PINO==//
   app.use(pino({ transport: { target: 'pino-pretty' } }));
   //==PINO==//
-
   //==РОУТИ==
-  app.get('/contacts/:id', getContactByIdContriller);
-  app.get('/contacts', getAllContactsContriller);
+  app.use('/contacts', contactRoutes);
 
-  app.use((req, res) => {
-    res.status(404).json({ message: 'Not found' });
-  });
-  const PORT = process.env.PORT || 3000;
+  app.use(notFoundHandler);
+  app.use(errorHandler);
 
   app.listen(PORT, (error) => {
     if (error) {
