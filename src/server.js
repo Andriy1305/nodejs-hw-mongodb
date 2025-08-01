@@ -2,9 +2,15 @@ import pino from 'pino-http';
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+
+import authRoutes from './routes/auth.js';
 import contactRoutes from './routes/contacts.js';
+
+import cookieParser from 'cookie-parser';
+
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
+import { authenticate } from './middlewares/authenticate.js';
 
 //==ОТОЧЕННЯ==//
 dotenv.config();
@@ -24,8 +30,15 @@ export const setupServer = () => {
   // ==PINO==//
   app.use(pino({ transport: { target: 'pino-pretty' } }));
   //==PINO==//
+
+  //==MIDDLEWARE COOKIE PARSER==/
+  app.use(cookieParser());
+  //==MIDDLEWARE COOKIE PARSER==/
+
   //==РОУТИ==
-  app.use('/contacts', contactRoutes);
+  //app.use('/contacts', contactRoutes);
+  app.use('/contacts', authenticate, contactRoutes);
+  app.use('/auth', authRoutes);
 
   app.use(notFoundHandler);
   app.use(errorHandler);

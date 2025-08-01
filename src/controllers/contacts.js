@@ -18,10 +18,13 @@ export const notFoundHandler = (req, res, next) => {
 
 export const getContactByIdController = async (req, res) => {
   const contactId = req.params.id.trim();
-  const contact = await getContactById(contactId);
+  const contact = await getContactById(contactId, req.user._id);
   if (!contact) {
     throw createHttpError(404, 'Contact not found');
   }
+  //if (contact.userId.toString() !== req.user._id.toString()) {
+  // throw new createHttpError.Forbidden('Contact restricted');
+  //}
   res.status(200).json({
     status: 200,
     message: 'Successfully found contacts!',
@@ -36,12 +39,14 @@ export const getAllContactsController = async (req, res) => {
   //console.log('FILTR:', filters);
   //console.log({ sortBy, sortOrder });
   //console.log(page, perPage);
+  //console.log('CONSOL:', req.user);
   const contacts = await getAllContacts({
     page,
     perPage,
     sortBy,
     sortOrder,
     filters,
+    userId: req.user._id,
   });
   res.status(200).json({
     status: 200,
@@ -52,8 +57,8 @@ export const getAllContactsController = async (req, res) => {
 
 export const createContactControl = async (req, res) => {
   //console.log({ BODY: req.body });
-  const contact = await greateContact(req.body);
-  //console.log({ RESULT: contact });
+  const contact = await greateContact({ ...req.body, userId: req.user._id });
+  console.log({ RESULT: contact });
   res.status(201).json({
     status: 201,
     message: 'Successfully created a contact!',
