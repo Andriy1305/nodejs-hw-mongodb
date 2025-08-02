@@ -48,10 +48,12 @@ export const greateContact = (payload) => {
   return Contact.create(payload);
 };
 
-export const deleteContact = (contactId) => {
-  return Contact.findByIdAndDelete(contactId);
+export const deleteContact = (contactId, userId) => {
+  return Contact.findOneAndDelete({ _id: contactId, userId });
 };
 
-export const patchContact = (contactId, payload) => {
-  return Contact.findByIdAndUpdate(contactId, payload, { new: true });
+export const patchContact = (contactId, userId, payload) => {
+  return Contact.findOneAndUpdate({ _id: contactId, userId }, payload, {
+    new: true,
+  });
 };
