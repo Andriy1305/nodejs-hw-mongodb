@@ -18,10 +18,13 @@ export const notFoundHandler = (req, res, next) => {
 
 export const getContactByIdController = async (req, res) => {
   const contactId = req.params.id.trim();
-  const contact = await getContactById(contactId);
+  const contact = await getContactById(contactId, req.user._id);
   if (!contact) {
     throw createHttpError(404, 'Contact not found');
   }
+  //if (contact.userId.toString() !== req.user._id.toString()) {
+  // throw new createHttpError.Forbidden('Contact restricted');
+  //}
   res.status(200).json({
     status: 200,
     message: 'Successfully found contacts!',
@@ -36,12 +39,14 @@ export const getAllContactsController = async (req, res) => {
   //console.log('FILTR:', filters);
   //console.log({ sortBy, sortOrder });
   //console.log(page, perPage);
+  //console.log('CONSOL:', req.user);
   const contacts = await getAllContacts({
     page,
     perPage,
     sortBy,
     sortOrder,
     filters,
+    userId: req.user._id,
   });
   res.status(200).json({
     status: 200,
@@ -52,7 +57,7 @@ export const getAllContactsController = async (req, res) => {
 
 export const createContactControl = async (req, res) => {
   //console.log({ BODY: req.body });
-  const contact = await greateContact(req.body);
+  const contact = await greateContact({ ...req.body, userId: req.user._id });
   //console.log({ RESULT: contact });
   res.status(201).json({
     status: 201,
@@ -62,7 +67,7 @@ export const createContactControl = async (req, res) => {
 };
 
 export const deleteContactController = async (req, res) => {
-  const result = await deleteContact(req.params.id);
+  const result = await deleteContact(req.params.id, req.user._id);
   //console.log({ DELETE: result });
   if (result === null) {
     throw createHttpError(404, 'Contact not found');
@@ -71,7 +76,7 @@ export const deleteContactController = async (req, res) => {
 };
 
 export const updateContactControler = async (req, res) => {
-  const result = await patchContact(req.params.id, req.body);
+  const result = await patchContact(req.params.id, req.user._id, req.body);
   // console.log({ PATCH: result });
   if (result === null) {
     throw createHttpError(404, 'Contact not found');
