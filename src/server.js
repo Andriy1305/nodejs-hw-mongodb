@@ -12,6 +12,9 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { authenticate } from './middlewares/authenticate.js';
 
+import path from 'node:path';
+//import { upload } from './middlewares/upload.js';
+
 //==ОТОЧЕННЯ==//
 dotenv.config();
 //==ОТОЧЕННЯ==//
@@ -34,6 +37,8 @@ export const setupServer = () => {
   //==MIDDLEWARE COOKIE PARSER==/
   app.use(cookieParser());
   //==MIDDLEWARE COOKIE PARSER==/
+
+  app.use('/photos', express.static(path.resolve('src/uploads/photos')));
 
   //==РОУТИ==
   //app.use('/contacts', contactRoutes);
