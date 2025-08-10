@@ -21,6 +21,6 @@ const transporter = nodemailer.createTransport({
 //});
 
 export const sendMail = (mail) => {
-  mail.from = 'mais-nasinya@ukr.net';
+  mail.from = getEnvVar('SMTP_FROM');
   return transporter.sendMail(mail);
 };
