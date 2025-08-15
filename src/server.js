@@ -16,7 +16,7 @@ import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import { authenticate } from './middlewares/authenticate.js';
 
 import path from 'node:path';
-//import { upload } from './middlewares/upload.js';
+import { fileURLToPath } from 'node:url';
 
 //==ОТОЧЕННЯ==//
 dotenv.config();
@@ -24,9 +24,11 @@ dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 
-const SWAGGER_DOCUMENT = JSON.parse(
-  fs.readFileSync(path.join('docs', 'swagger.json')),
-);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const swaggerPath = path.join(__dirname, '..', 'docs', 'swagger.json');
+
+const SWAGGER_DOCUMENT = JSON.parse(fs.readFileSync(swaggerPath, 'utf-8'));
 
 export const setupServer = () => {
   const app = express();
@@ -41,15 +43,14 @@ export const setupServer = () => {
   app.use(pino({ transport: { target: 'pino-pretty' } }));
   //==PINO==//
 
-  //==MIDDLEWARE COOKIE PARSER==/
+  //==MIDDLEWARE COOKIE PARSER==//
   app.use(cookieParser());
-  //==MIDDLEWARE COOKIE PARSER==/
+  //==MIDDLEWARE COOKIE PARSER==//
 
   app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(SWAGGER_DOCUMENT));
   app.use('/photos', express.static(path.resolve('src/uploads/photos')));
 
   //==РОУТИ==
-  //app.use('/contacts', contactRoutes);
   app.use('/contacts', authenticate, contactRoutes);
   app.use('/auth', authRoutes);
 
@@ -63,7 +64,3 @@ export const setupServer = () => {
     console.log(`Server is running on port ${PORT}`);
   });
 };
-
-//node ./src/server.js
-//   AT11vQxXZ6t8PgUD
-//  mongodb+srv://student:AT11vQxXZ6t8PgUD@cluster0.jj8ksp7.mongodb.net/university?retryWrites=true&w=majority
