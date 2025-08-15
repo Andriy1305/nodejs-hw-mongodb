@@ -1,0 +1,42 @@
+type: object
+required:
+  - _id
+  - name
+  - phoneNumber
+  - contactType
+  - userId
+  - createdAt
+  - updatedAt
+properties:
+  _id:
+    type: string
+    example: 64b23c1f8a5e1f4a9d0b1234
+  name:
+    type: string
+    example: John Doe
+  phoneNumber:
+    type: string
+    example: '+123456789'
+  email:
+    type: string
+    example: john@example.com
+  isFavourite:
+    type: boolean
+    example: false
+  contactType:
+    type: string
+    example: personal
+  userId:
+    type: string
+    example: 64b23c1f8a5e1f4a9d0b9999
+  photo:
+    type: string
+    example: 'http://someurl/photo.jpg'
+  createdAt:
+    type: string
+    format: date-time
+    example: '2023-01-01T00:00:00.000Z'
+  updatedAt:
+    type: string
+    format: date-time
+    example: '2023-01-01T00:00:00.000Z'

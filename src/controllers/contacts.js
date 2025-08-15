@@ -62,17 +62,18 @@ export const getAllContactsController = async (req, res) => {
 
 export const createContactControl = async (req, res) => {
   let photo = null;
-  if (getEnvVar('UPLOAD_TO_CLOUDINARY') === 'true') {
-    const result = await uploadToCloudinary(req.file.path);
-    await fs.unlink(req.file.path);
-    //console.log(result);
-    photo = result.secure_url;
-  } else {
-    await fs.rename(
-      req.file.path,
-      path.resolve('src/uploads/photos', req.file.filename),
-    );
-    photo = `http://localhost:8080/photos/${req.file.filename}`;
+  if (req.file) {
+    if (getEnvVar('UPLOAD_TO_CLOUDINARY') === 'true') {
+      const result = await uploadToCloudinary(req.file.path);
+      await fs.unlink(req.file.path);
+      photo = result.secure_url;
+    } else {
+      await fs.rename(
+        req.file.path,
+        path.resolve('src/uploads/photos', req.file.filename),
+      );
+      photo = `http://localhost:8080/photos/${req.file.filename}`;
+    }
   }
   const contact = await greateContact({
     ...req.body,

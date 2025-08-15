@@ -6,6 +6,7 @@ import {
   deleteContactController,
   updateContactControler,
 } from '../controllers/contacts.js';
+import { transformBodyTypes } from '../middlewares/transformBodyTypes.js';
 import { isValidId } from '../middlewares/isValidId.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
@@ -24,6 +25,7 @@ router.get('/:id', isValidId, ctrlWrapper(getContactByIdController));
 router.post(
   '/',
   upload.single('photo'),
+  transformBodyTypes,
   validateBody(createContactSchema),
   ctrlWrapper(createContactControl),
 );

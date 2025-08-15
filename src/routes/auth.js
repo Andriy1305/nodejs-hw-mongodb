@@ -46,4 +46,6 @@ router.post(
   ctrlWrapper(resetPasswordControler),
 );
 
+//router.get('/api-docs');
+
 export default router;
