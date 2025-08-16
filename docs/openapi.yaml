@@ -12,7 +12,7 @@ tags:
     description: Operations with contacts
 
 servers:
-  - url: http://127.0.0.1:8080
+  - url: https://nodejs-hw-mongodb-in6i.onrender.com
 
 paths:
   /contacts/{id}:

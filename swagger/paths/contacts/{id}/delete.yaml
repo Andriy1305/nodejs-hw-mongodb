@@ -15,7 +15,7 @@ parameters:
     example: 64fa4567a0c1c7e27f7df0b2
 responses:
   '204':
-    description: Successfully deleted contact (no content)
+    description: Contact successfully deleted, no content returned.
   '401':
     $ref: '../../../components/responses/401.yaml'
   '404':
